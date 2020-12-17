@@ -1,0 +1,123 @@
+@import "../../colors.scss";
+
+.profile {
+  width: 100%;
+  padding: 3rem 4rem;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1.5fr;
+  color: $color_2;
+}
+
+.name {
+  font-size: 20px;
+}
+
+.confirm {
+  width: max-content;
+  margin-bottom: 1rem;
+}
+
+.avatar {
+  width: 210px;
+  height: 210px;
+  background-color: #c4c4c4;
+  border-radius: 50%;
+  border: 3px solid $color_1;
+}
+
+.empty {
+  margin-top: 1.5rem;
+}
+
+.more {
+  line-height: 30px;
+  margin-top: 1rem;
+  font-size: 16px;
+}
+
+.title {
+  padding: 0.3rem 0.2rem;
+  font-size: 16px;
+  border-bottom: 2px solid $color_2;
+}
+
+.services {
+  margin-right: 2rem;
+}
+
+.t {
+  margin-top: 1.5rem;
+}
+
+.service {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  font-size: 14px;
+}
+
+.marker {
+  width: 20px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 5px;
+}
+
+.marker > img {
+  width: 100%;
+}
+
+.d {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  // grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  height: 60vh;
+}
+
+.doc {
+  width: 100%;
+  height: max-content;
+  background-color: $color_1;
+  border-radius: 3px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.img {
+  width: 100%;
+  margin: 0 auto;
+}
+.img > img {
+  width: 100%;
+  height: auto;
+}
+
+@media (max-width: 1301px) {
+  .profile {
+    grid-template-columns: 1fr;
+  }
+
+  .services {
+    margin-right: 0;
+    margin: 2rem 0;
+  }
+}
+
+@media (max-width: 461px) {
+  .profile {
+    padding: 1rem;
+  }
+
+  .info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+}

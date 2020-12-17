@@ -1,0 +1,60 @@
+@import "../../colors.scss";
+
+.cardVolunteer {
+  padding: 1rem;
+  color: $color_2;
+}
+
+.btn {
+  width: max-content;
+  margin: 10px auto;
+}
+
+.btn > a {
+  background-color: $color_1;
+  border: none;
+  outline: none;
+  padding: 0.2rem 0.4rem;
+  border-radius: 30px;
+
+  font-size: 16px;
+  color: $color_2;
+  border: 3px solid transparent;
+
+  transition: 0.5s linear all;
+}
+
+.avatar {
+  margin: 0 auto 10px;
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  background-color: grey;
+  border: 3px solid $color_1;
+}
+
+.location,
+.info {
+  font-size: 16px;
+  text-align: center;
+}
+
+.btn > a {
+  text-decoration: none;
+  color: $color_2;
+  text-decoration: none;
+  background-color: $color_1;
+  border: none;
+  outline: none;
+  padding: 0 1rem;
+  border-radius: 30px;
+  font-size: 16px;
+  border: 3px solid transparent;
+  transition: 0.5s linear all;
+}
+
+.btn:hover > a {
+  border-color: $color_2_h;
+  color: $color_2_h;
+  background-color: transparent;
+}

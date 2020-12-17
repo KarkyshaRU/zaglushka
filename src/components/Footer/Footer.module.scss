@@ -1,0 +1,12 @@
+@import "../../colors.scss";
+
+.footer {
+  padding: 0.4rem;
+  background-color: $color_1;
+  color: $color_2;
+  box-shadow: 0px -5px 5px 0px rgba(0, 0, 0, 0.1);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -3,10 +3,11 @@ import React from "react";
 import s from "./Logo.module.scss";
 
 import hands from "../../accets/hands.svg";
+import { NavLink } from "react-router-dom";
 
 const Logo = () => {
   return (
-    <div className={s.logo}>
+    <NavLink className={s.logo} to="/">
       <div className={s.svg}>
         <img src={hands} alt="" />
       </div>
@@ -14,7 +15,7 @@ const Logo = () => {
         <div className={s.title}>Добрые руки</div>
         <div className={s.subtitle}>Сервис патронажных услуг</div>
       </div>
-    </div>
+    </NavLink>
   );
 };
 

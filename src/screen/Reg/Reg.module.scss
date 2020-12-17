@@ -1,0 +1,254 @@
+@import "../../colors.scss";
+
+.login {
+  color: $color_2;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  font-size: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.head {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-content: center;
+  align-items: center;
+  width: 70vw;
+}
+
+.discription {
+  text-align: end;
+  margin-right: 10px;
+}
+
+.wrp {
+  transition: 0.5s linear all;
+}
+
+.one {
+  margin: 0 auto;
+  width: 30%;
+}
+
+.two {
+  display: grid;
+  // justify-content: center;
+  align-items: center;
+  max-width: 1600px;
+  width: 90vw;
+  margin: 2rem auto 0;
+  grid-template-columns: 40vw 1fr;
+}
+
+.btns {
+  width: 90%;
+  margin: 2rem auto 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.mail,
+.password {
+  font-size: 16px;
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  margin: 5px 0;
+  padding: 5px 10px;
+  outline: none;
+
+  color: $color_2;
+  border-bottom: 2px solid $color_2;
+}
+
+.toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: max-content;
+  margin: 2.5rem auto;
+  margin-left: 10px;
+}
+
+.var {
+  padding: 1rem;
+  text-align: center;
+  border: 3px solid transparent;
+
+  transition: 0.5s linear all;
+}
+
+.docs {
+  margin-left: 1rem;
+  width: 100%;
+  height: 100%;
+}
+
+.active {
+  border: 3px solid $color_7;
+  background-color: $color_4;
+}
+
+.noactive {
+  background-color: $color_8;
+  border: 3px solid $color_8_h;
+}
+
+.btn {
+  cursor: pointer;
+  background-color: $color_4;
+  border: none;
+  outline: none;
+  padding: 0.1rem 1rem;
+  // width: 60%;
+  text-align: center;
+  border-radius: 30px;
+
+  font-size: 18px;
+  margin: 20px 0 10px;
+  color: $color_2;
+  border: 3px solid transparent;
+
+  transition: 0.5s linear all;
+}
+
+.btn:hover {
+  // text-decoration: underline;
+  border-color: $color_2_h;
+  color: $color_2_h;
+  background: transparent;
+}
+
+.mail::placeholder,
+.password::placeholder {
+  color: $placeholder;
+}
+
+.create {
+  color: $color_2;
+  transition: 0.5s linear all;
+  text-decoration: none;
+}
+
+.create:hover {
+  color: $color_2_h;
+}
+
+.block {
+  width: 100vw;
+  height: calc(100vh + 100px);
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: $notif_bg;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.block > div {
+  background-color: $notif_block_bg;
+  padding: 1.5rem;
+  // padding: 0.5rem;
+
+  width: 60%;
+  border-radius: 1rem;
+  font-size: 16px;
+
+  color: $color_2;
+}
+
+.block > .errors > .title {
+  width: max-content;
+  width: 40%;
+  margin: 0 auto 2rem;
+  border-bottom: 3px solid $color_1;
+  color: $color_1;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.err {
+  margin-bottom: 10px;
+}
+
+.block .btn {
+  cursor: pointer;
+  background-color: $color_4;
+  border: none;
+  outline: none;
+  padding: 0.1rem 0;
+  width: 100%;
+  text-align: center;
+  border-radius: 30px;
+
+  font-size: 16px;
+  margin: 20px 0 10px;
+  color: $color_2;
+  border: 3px solid transparent;
+
+  transition: 0.5s linear all;
+}
+
+.block .btn:hover {
+  // text-decoration: underline;
+  border-color: $color_2_h;
+  color: $color_2_h;
+  background: transparent;
+}
+
+.one {
+  width: 50%;
+}
+
+.go {
+  color: $color_2 !important;
+  transition: 0.5s linear all;
+  // text-decoration: none;
+  margin-bottom: 2rem;
+}
+
+.go:hover {
+  color: $color_2_h;
+}
+
+@media (max-width: 1200px) {
+  .two {
+    // max-width: 550px;
+    grid-template-columns: 1fr;
+  }
+
+  .docs {
+    margin-left: 0;
+  }
+
+  .form {
+    margin-bottom: 2rem;
+  }
+}
+
+// @media (max-width: 485px) {
+//   .block > div {
+//     width: 300px;
+//   }
+// }
+
+// @media (max-width: 461px) {
+//   .block > div {
+//     width: 150px;
+//   }
+// }

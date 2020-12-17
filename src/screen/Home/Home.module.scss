@@ -1,0 +1,137 @@
+@import "../../colors.scss";
+
+.home {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: $color_2;
+  flex-direction: column;
+}
+
+.text {
+  width: 90%;
+  min-width: 286px;
+  max-width: 1200px;
+}
+
+.title {
+  font-size: 22px;
+  // text-align: center;
+  margin-bottom: 25px;
+}
+
+.info {
+  font-size: 18px;
+  // text-align: center;
+  line-height: 25px;
+
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  grid-template-columns: 1fr 1fr;
+
+  // min-width: 250px;
+}
+
+.image {
+  // overflow: hidden;
+}
+
+.image img {
+  border-radius: 5px;
+
+  width: 100%;
+}
+
+.more {
+  margin-left: 20px;
+}
+.buttonsRL {
+  margin-top: 90px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  width: 30%;
+  min-width: 285px;
+  max-width: 1200px;
+}
+
+.r,
+.l {
+  // width: max-content;
+  // margin: 0 auto;
+}
+
+.r > a,
+.l > a {
+  text-decoration: none;
+  background-color: $color_4;
+  border: none;
+  outline: none;
+  display: block;
+  text-align: center;
+  padding: 1rem 1.5rem;
+  border-radius: 30px;
+
+  font-size: 18px;
+  font-weight: bold;
+  color: $color_2;
+  border: 3px solid transparent;
+
+  transition: 0.5s linear all;
+}
+
+.r > a:hover,
+.l:hover > a {
+  // text-decoration: underline;
+  border-color: $color_2_h;
+  color: $color_2_h;
+  background: transparent;
+}
+
+.buttonMore {
+  margin: 50px auto 0px;
+}
+
+.buttonMore > a {
+  color: $color_2;
+  transition: 0.5s linear all;
+}
+
+.buttonMore > a:hover {
+  color: $color_2_h;
+}
+
+.listItem {
+  display: flex;
+  align-items: flex-start;
+}
+
+.marker {
+  margin-right: 5px;
+}
+
+.marker > img {
+  width: 20px;
+  height: 20px;
+}
+
+.footnote {
+  margin-top: 20px;
+}
+
+@media (max-width: 1250px) {
+  .info {
+    grid-template-columns: 55% 1fr;
+  }
+}
+
+@media (max-width: 1151px) {
+  .info {
+    grid-template-columns: 1fr;
+  }
+
+  .image {
+    margin-bottom: 20px;
+  }
+}
