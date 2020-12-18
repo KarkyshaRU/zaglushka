@@ -1,24 +1,32 @@
 // React
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 // Reduc
 import { connect } from "react-redux";
-import { getUser, logout, setAcctiveAccount } from "../../redux/reducer";
+import {
+  getUser,
+  logout,
+  setAcctiveAccount,
+  updateUserInfo,
+} from "../../redux/reducer";
 
-import Header from "../../components/Header";
 import s from "./Profile.module.scss";
 
 import check from "../../accets/check.svg";
+import nocheck from "../../accets/check.png";
+import edit from "../../accets/svg/edit.svg";
+
 import { Redirect } from "react-router";
 import getAge from "../../helpers/getAge";
 import PhotoShower from "../../components/PhotoShower";
 import Checkbox from "../../components/Checkbox";
+import EditProfile from "./EditProfile/EditProfile";
 
-const Service = ({ text }) => {
+const Service = ({ text, isChecked }) => {
   return (
     <div className={s.service}>
       <div className={s.marker}>
-        <img src={check} />
+        {isChecked ? <img src={check} /> : <img src={nocheck} />}
       </div>
       <div className={s.text}>{text}</div>
     </div>
@@ -32,8 +40,10 @@ function Profile({
   logout,
   credUser,
   setAcctiveAccount,
+
+  updateUserInfo,
 }) {
-  debugger;
+  const [isEdit, setIsEdit] = useState(false);
 
   useEffect(() => {
     getUser(match.params.id);
@@ -58,12 +68,26 @@ function Profile({
     }
   };
 
+  debugger;
   return (
     <>
+      {isEdit && (
+        <EditProfile
+          onClose={() => setIsEdit(false)}
+          onSave={updateUserInfo}
+          id={credUser.id}
+          {...profile.info}
+        />
+      )}
       <div className={s.profile}>
         <div className={s.info}>
           <div className={s.name}>
-            {profile.info ? profile.info.fullName : "Loading..."}
+            <span>{profile.info ? profile.info.fullName : "Loading..."}</span>
+            {credUser.id === profile.id && (
+              <div className={s.edit} onClick={() => setIsEdit(true)}>
+                <img src={edit} alt="" />
+              </div>
+            )}
           </div>
           <div className={s.confirm}>
             {profile.info ? (
@@ -104,11 +128,13 @@ function Profile({
           <div className={s.title}>Услуги:</div>
           <div className={s.t}>
             {profile.id &&
-              profile.info &&
+            profile.info &&
+            profile.info.role === 1 &&
+            profile.info.services !== 0 ? (
               profile.info.services.map((serv) => {
-                return <Service text={serv} />;
-              })}
-            {profile.info.services.length === 0 && (
+                return <Service text={serv.title} isChecked={serv.isActive} />;
+              })
+            ) : (
               <div className={s.email}>Данные не найдены</div>
             )}
           </div>
@@ -143,5 +169,7 @@ export default connect(
     getUser,
     setAcctiveAccount,
     logout,
+
+    updateUserInfo,
   }
 )(Profile);

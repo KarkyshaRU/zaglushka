@@ -5,6 +5,7 @@ import { NavLink } from "react-router-dom";
 import s from "./CardVolunteer.module.scss";
 
 import getAge from "../../helpers/getAge";
+import parseRole from "../../helpers/parseRole";
 
 const CardVolunteer = ({ info, id, isAdminPanel }) => {
   return (
@@ -13,9 +14,14 @@ const CardVolunteer = ({ info, id, isAdminPanel }) => {
       <div className={s.info}>
         {info.fullName} ({getAge(info.birthday)})
       </div>
-      <div className={s.location}>
-        Статус: {info.active ? "Подтвержденный" : "Неподтвержденный"}
-      </div>
+      {isAdminPanel && (
+        <>
+          <div className={s.location}>
+            Статус: {info.active ? "подтвержденный" : "неподтвержденный"}
+          </div>
+          <div className={s.location}>Роль: {parseRole(info.role)}</div>
+        </>
+      )}
       <div className={s.location}>{info.location}</div>
       <div className={s.btn}>
         <NavLink to={`/profile/${id}`}>Профиль</NavLink>

@@ -19,7 +19,7 @@ const MyMenu = ({ isLogin, isAdmin }) => {
   return (
     <div className={s.menu}>
       <ul>
-        {isAdmin && <MenuItem path="/admin/users" text="Все исполнители" />}
+        {isAdmin && <MenuItem path="/admin/users" text="Все пользователи" />}
         {isAdmin && <MenuItem path="/admin/feedbacks" text="Отзывы" />}
 
         {!isAdmin && <MenuItem path="/volunteers" text="Перейти к услугам" />}

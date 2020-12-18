@@ -10,6 +10,7 @@ import {
   loginCache,
   getLastFeedback,
   getAllFeedbacks,
+  getServices,
 } from "./redux/reducer";
 
 // Components
@@ -37,8 +38,11 @@ function App({
   // feeback
   getLastFeedback,
   getAllFeedbacks,
+
+  getServices,
 }) {
   useEffect(() => {
+    getServices();
     getAllFeedbacks();
     loginCache();
     getUsers();
@@ -77,4 +81,6 @@ export default connect((state) => ({ users: state.users }), {
   // feebacks
   getLastFeedback,
   getAllFeedbacks,
+
+  getServices,
 })(App);

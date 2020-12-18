@@ -118,6 +118,8 @@ function AllUsers({
                       services.filter((s) => s.isActive)
                     );
                   })
+
+                  // find by fullName
                   .filter(({ info }) => {
                     debugger;
                     let a =
@@ -160,9 +162,9 @@ export default connect(
       users:
         state.users.length > 0
           ? state.users
-              .filter((user) => {
-                return user.info.role === 1;
-              })
+              // .filter((user) => {
+              //   return user.info.role === 1;
+              // })
               .sort((prev, next) => prev.info.active - next.info.active)
           : [],
     };

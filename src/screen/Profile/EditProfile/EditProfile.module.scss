@@ -1,0 +1,131 @@
+@import "../../../colors.scss";
+
+.editProfile_bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  color: $color_1;
+
+  background-color: rgba(59, 59, 72, 0.62);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100%;
+}
+
+.block {
+  width: 60vw;
+  padding: 3rem 2rem;
+  border-radius: 5px;
+  background-color: $color_2;
+}
+
+.title {
+  text-align: center;
+  font-size: 18px;
+  margin-bottom: 1rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.input {
+  font-size: 16px;
+  width: 80%;
+  background-color: transparent;
+  border: none;
+  margin: 5px 0;
+  padding: 5px 10px;
+  outline: none;
+
+  color: $color_1;
+  border-bottom: 2px solid $color_1;
+}
+
+.btns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+
+  margin: 3rem auto 0;
+}
+
+.btn {
+  cursor: pointer;
+  background-color: $color_4;
+  border: none;
+  outline: none;
+  padding: 0.1rem 1rem;
+  text-align: center;
+  border-radius: 30px;
+
+  font-size: 18px;
+  color: $color_2;
+  border: 3px solid transparent;
+
+  transition: 0.5s linear all;
+}
+
+.btn:hover {
+  border-color: $color_2_h;
+  color: $color_2_h;
+  background: transparent;
+}
+
+.danger {
+  background-color: $danger;
+}
+
+.danger:hover {
+  border-color: $danger;
+  color: $danger;
+  background: transparent;
+}
+
+.searchWrp {
+  width: 100%;
+}
+
+.search {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 1fr 28px;
+  padding: 1px;
+  border-radius: 5px;
+  border: 2px solid $color_1;
+  // width: 90%;
+  margin: 1rem auto 0.5rem;
+}
+
+.search > input {
+  padding: 0.4rem;
+  color: $color_1;
+  font-size: 16px;
+  width: 90%;
+
+  background-color: transparent;
+  border: none;
+  outline: none;
+}
+
+.search > img {
+  width: 28px;
+  height: 28px;
+}
+
+.services_wrp {
+  width: 75%;
+}
+
+.services {
+  overflow: auto;
+  height: 30vh;
+}

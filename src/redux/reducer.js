@@ -49,68 +49,7 @@ const initState = {
 
   servicesFilterLine: "",
 
-  services: [
-    {
-      id: 1,
-      title: "Обработка пролежней или иных повреждений кожных покровов",
-      isActive: false,
-    },
-
-    {
-      id: 2,
-      title: "Постановка клизмы",
-      isActive: false,
-    },
-
-    {
-      id: 3,
-      title: "Общий массаж",
-      isActive: false,
-    },
-
-    {
-      id: 4,
-      title: "Инъекции внутривенным / внутримышечным способом",
-      isActive: false,
-    },
-
-    {
-      id: 5,
-      title: "Забор анализа крови",
-      isActive: false,
-    },
-
-    {
-      id: 6,
-      title: "Постановка капельниц",
-      isActive: false,
-    },
-
-    {
-      id: 7,
-      title: "Контроль за своевременным приемом назначенных лекарств",
-      isActive: false,
-    },
-
-    {
-      id: 8,
-      title: "Сопровождение при посещении медицинских учреждений ",
-      isActive: false,
-    },
-
-    {
-      id: 9,
-      title: "Осуществление гигиенических мероприятий",
-      isActive: false,
-    },
-
-    {
-      id: 10,
-      title:
-        "Помощь хозяйственно-бытового характера (уборка, стирка, поход в магазин)",
-      isActive: false,
-    },
-  ],
+  services: [],
 };
 
 async function asyncForEach(arr, callback) {
@@ -119,9 +58,12 @@ async function asyncForEach(arr, callback) {
 
 const ADD_USER = "ADD_USER";
 const SET_USERS = "SET_USERS";
+const UPDATE_USER_INFO = "UPDATE_USER_INFO";
+
 const AUTH_USER = "AUTH_USER";
 const ADD_ERROR = "ADD_ERROR";
 const CLEAR_ERRORS = "CLEAR_ERRORS";
+
 const SET_CURRENT_PROFILE = "SET_CURRENT_PROFILE";
 const LOGIN = "LOGIN";
 const LOGOUT = "LOGOUT";
@@ -129,6 +71,7 @@ const UPDATE_PROFILE_ACTIVE = "UPDATE_PROFILE_ACTIVE";
 const CHANGE_REG_FORM_DATA = "CHANGE_REG_FORM_DATA";
 const SET_ALL_FEEDBACKS = "SET_ALL_FEEDBACKS";
 
+const SET_SERVICES = "SET_SERVICES";
 // filter services
 const SET_SERVICES_FILTER_LINE = "SET_SERVICES_FILTER_LINE";
 const SET_SERVICE_STATUS = "SET_SERVICE_STATUS";
@@ -143,12 +86,66 @@ const UPDATE_FEEDBACK_STATUS = "UPDATE_FEEDBACK_STATUS";
 const reducer = (state = initState, { type, payload }) => {
   switch (type) {
     case SET_USERS: {
-      return { ...state, users: payload };
+      let services = state.services;
+      return {
+        ...state,
+        users: payload.map((user) => {
+          let data = {
+            ...user,
+            info: {
+              ...user.info,
+              services: services.map((s) => {
+                let i = user.info.services.indexOf(s.title);
+
+                let t = i !== -1 ? { ...s, isActive: true } : s;
+                return t;
+              }),
+            },
+          };
+
+          debugger;
+          return { ...data };
+        }),
+      };
+    }
+
+    case SET_SERVICES: {
+      return {
+        ...state,
+        services: payload,
+      };
+    }
+
+    case UPDATE_USER_INFO: {
+      let services = state.services;
+
+      let data = {
+        ...payload,
+        info: {
+          ...payload.info,
+          services: services.map((s) => {
+            let i = payload.info.services.indexOf(s.title);
+
+            let t = i !== -1 ? { ...s, isActive: true } : s;
+            return t;
+          }),
+        },
+      };
+
+      debugger;
+
+      return {
+        ...state,
+        credUser: data,
+        currentProfile: data,
+        users: state.users.map((user) => {
+          return user.id === data.id ? data : user;
+        }),
+      };
     }
 
     case UPDATE_FEEDBACK_STATUS: {
       const { id, status } = payload;
-      debugger;
 
       return {
         ...state,
@@ -269,7 +266,20 @@ const reducer = (state = initState, { type, payload }) => {
     }
 
     case SET_CURRENT_PROFILE: {
-      return { ...state, currentProfile: payload };
+      let data = {
+        ...payload,
+        info: {
+          ...payload.info,
+          services: state.services.map((s) => {
+            let i = payload.info.services.indexOf(s.title);
+
+            let t = i !== -1 ? { ...s, isActive: true } : s;
+            return t;
+          }),
+        },
+      };
+
+      return { ...state, currentProfile: data };
     }
 
     case CLEAR_ERRORS: {
@@ -307,6 +317,37 @@ const reducer = (state = initState, { type, payload }) => {
       return state;
   }
 };
+
+export const getServices = () => async (dispatch) => {
+  let data = await (await db.collection("settings").doc("services").get())
+    .data()
+    .values.map((val, id) => {
+      return {
+        id,
+        title: val,
+        isActive: false,
+      };
+    });
+  dispatch({
+    type: SET_SERVICES,
+    payload: data,
+  });
+};
+
+export const updateUserInfo = (id, newInfo) => async (dispatch) => {
+  let data = await db
+    .collection("users")
+    .doc(id)
+    .update({ ...newInfo });
+
+  let newData = await (await db.collection("users").doc(id).get()).data();
+  dispatch(updateUserInfoAC(id, newData));
+};
+
+const updateUserInfoAC = (id, info) => ({
+  type: UPDATE_USER_INFO,
+  payload: { id, info },
+});
 
 export const updateFeedbackStatus = (id, status) => async (dispatch) => {
   await db.collection("feedbacks").doc(id).update({
@@ -355,7 +396,6 @@ export const addFeedback = (rate, text) => async (dispatch, getState) => {
   };
 
   await ref.set(newFeeback);
-  debugger;
 };
 
 export const getLastFeedback = () => async (dispatch) => {
@@ -366,7 +406,6 @@ export const getLastFeedback = () => async (dispatch) => {
 
   while (last.length < 3 && data.docs.length > i) {
     let doc = data.docs[i].data();
-    debugger;
 
     if (doc.isActive) {
       last.push(doc);
@@ -418,7 +457,9 @@ const changeRegFormDataAC = (part, value) => ({
   payload: { part, value },
 });
 
-export const getUsers = () => async (dispatch) => {
+export const getUsers = () => async (dispatch, getState) => {
+  let services = getState().services;
+
   let ref = await db.collection("users");
   let data = await ref.get();
 
@@ -458,8 +499,6 @@ export const getUser = (id) => async (dispatch) => {
     id: data.id,
     info: data.data(),
   };
-
-  debugger;
 
   dispatch(setCurrentProfileAC(user));
 
@@ -540,7 +579,6 @@ export const addUser = ({
       console.log(docs.length === 0 && role === 2);
       if (docsURL[docs.length - 1] || (docs.length === 0 && role === 2)) {
         clearInterval(inte);
-        debugger;
         const ref = db.collection("users").doc();
 
         const userInfo2 = {
@@ -557,7 +595,6 @@ export const addUser = ({
         };
 
         await ref.set(userInfo2);
-        debugger;
         dispatch(addUserAC(userInfo2));
       }
     }, 500);
@@ -565,7 +602,6 @@ export const addUser = ({
 };
 
 export const logout = () => async (dispatch) => {
-  debugger;
   localStorage.removeItem("userHands");
 
   dispatch(logoutAC());
@@ -636,8 +672,6 @@ export const isValidateReg = () => async (dispatch, getState) => {
     isPass &&
     isLenghtPass &&
     isDocs;
-
-  debugger;
 
   dispatch({
     type: "SET_BLOCK",

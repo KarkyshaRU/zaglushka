@@ -10,6 +10,17 @@
 
 .name {
   font-size: 20px;
+  display: flex;
+  align-items: center;
+  // justify-content: center;
+}
+
+.edit {
+  margin-left: 0.3rem;
+}
+
+.edit > img {
+  width: 20px;
 }
 
 .confirm {
@@ -50,8 +61,10 @@
 }
 
 .service {
-  display: flex;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  gap: 2px;
+  align-items: flex-start;
   padding: 0.5rem 1rem;
   font-size: 14px;
 }
@@ -62,7 +75,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 5px;
 }
 
 .marker > img {
