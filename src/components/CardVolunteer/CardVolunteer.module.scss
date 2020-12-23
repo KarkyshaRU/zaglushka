@@ -24,13 +24,9 @@
   transition: 0.5s linear all;
 }
 
-.avatar {
-  margin: 0 auto 10px;
-  border-radius: 50%;
-  width: 120px;
-  height: 120px;
-  background-color: grey;
-  border: 3px solid $color_1;
+.ava {
+  width: max-content;
+  margin: 0 auto 0.5rem;
 }
 
 .location,

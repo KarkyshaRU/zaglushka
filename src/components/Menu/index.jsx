@@ -24,6 +24,7 @@ const MyMenu = ({ isLogin, isAdmin }) => {
 
         {!isAdmin && <MenuItem path="/volunteers" text="Перейти к услугам" />}
         {!isAdmin && <MenuItem path="/feedback" text="Обратная связь" />}
+        {!isAdmin && isLogin && <MenuItem path="/querties" text="Запросы" />}
 
         <MenuItem path="/rules" text="Условия пользования сервисом" />
         {!isLogin && <MenuItem path="/login" text="Войти" />}

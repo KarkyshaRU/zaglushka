@@ -8,6 +8,9 @@ import {
   logout,
   setAcctiveAccount,
   updateUserInfo,
+
+  // query
+  addQuery,
 } from "../../redux/reducer";
 
 import s from "./Profile.module.scss";
@@ -21,7 +24,7 @@ import getAge from "../../helpers/getAge";
 import PhotoShower from "../../components/PhotoShower";
 import Checkbox from "../../components/Checkbox";
 import EditProfile from "./EditProfile/EditProfile";
-
+import Avatar from "../../helpers/Avatar";
 const Service = ({ text, isChecked }) => {
   return (
     <div className={s.service}>
@@ -42,6 +45,9 @@ function Profile({
   setAcctiveAccount,
 
   updateUserInfo,
+
+  // Query
+  addQuery,
 }) {
   const [isEdit, setIsEdit] = useState(false);
 
@@ -105,8 +111,21 @@ function Profile({
               "Loading..."
             )}
           </div>
-          <div className={s.avatar}></div>
+          <Avatar src={profile.info.avatar} size={210} />
           <div className={s.more}>
+            {profile.id !== credUser.id &&
+              profile.info.role === 1 &&
+              profile.info.active === 1 &&
+              credUser.info.active === 1 &&
+              credUser.info.role === 2 && (
+                <div
+                  className={s.btn}
+                  onClick={() => addQuery(profile.id, credUser.id)}
+                >
+                  Отправить запрос
+                </div>
+              )}
+
             <div className={s.email}>
               Почта: {profile.info ? profile.info.email : "Loading..."}
             </div>
@@ -171,5 +190,8 @@ export default connect(
     logout,
 
     updateUserInfo,
+
+    // query
+    addQuery,
   }
 )(Profile);

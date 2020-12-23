@@ -16,6 +16,7 @@ import Button from "@material-ui/core/Button";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import { NavLink } from "react-router-dom";
+import Avatar from "../../helpers/Avatar";
 
 const Header = ({ credUser, logout }) => {
   const { id, info } = credUser;
@@ -54,7 +55,7 @@ const Header = ({ credUser, logout }) => {
             onClick={handleClick}
           >
             <div className={s.userInfo} onClick={handleClick}>
-              <div className={s.img}></div>
+              <Avatar size={30} scr={""} />
               <div className={s.email}>{id && email}</div>
             </div>
           </Button>

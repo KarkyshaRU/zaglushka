@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { NavLink, Redirect } from "react-router-dom";
 
-import { loginUser, clearErrorsLogin } from "../../redux/reducer";
+import { loginUser, clearErrorsLogin, saveMessage } from "../../redux/reducer";
 
 import Header from "../../components/Header";
 import s from "./Login.module.scss";
 
-function Login({ loginUser, clearErrorsLogin, errors, credUser }) {
+function Login({ loginUser, clearErrorsLogin, errors, credUser, saveMessage }) {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
 
@@ -79,5 +79,6 @@ export default connect(
   {
     loginUser,
     clearErrorsLogin,
+    saveMessage,
   }
 )(Login);

@@ -6,11 +6,15 @@ import s from "./CardVolunteer.module.scss";
 
 import getAge from "../../helpers/getAge";
 import parseRole from "../../helpers/parseRole";
+import Avatar from "../../helpers/Avatar";
 
 const CardVolunteer = ({ info, id, isAdminPanel }) => {
+  debugger;
   return (
     <div className={s.cardVolunteer}>
-      <div className={s.avatar}></div>
+      <div className={s.ava}>
+        <Avatar src={info.avatar} size={120} />
+      </div>
       <div className={s.info}>
         {info.fullName} ({getAge(info.birthday)})
       </div>

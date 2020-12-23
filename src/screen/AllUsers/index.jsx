@@ -121,7 +121,6 @@ function AllUsers({
 
                   // find by fullName
                   .filter(({ info }) => {
-                    debugger;
                     let a =
                       info.fullName
                         .toLowerCase()

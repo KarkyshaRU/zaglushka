@@ -50,11 +50,19 @@ const initState = {
   servicesFilterLine: "",
 
   services: [],
+
+  querties: [],
 };
 
 async function asyncForEach(arr, callback) {
   for (let i = 0; i < arr.length; i++) await callback(arr[i], i, arr);
 }
+
+// QUERY
+const UPDATE_DOC = "UPDATE_DOC";
+const ADD_QUERY = "ADD_QUERY";
+const SET_QUERIES = "SET_QUERIES";
+const GET_UPDATED_QUERY = "GET_UPDATED_QUERY";
 
 const ADD_USER = "ADD_USER";
 const SET_USERS = "SET_USERS";
@@ -85,6 +93,45 @@ const UPDATE_FEEDBACK_STATUS = "UPDATE_FEEDBACK_STATUS";
 
 const reducer = (state = initState, { type, payload }) => {
   switch (type) {
+    // Query
+    case GET_UPDATED_QUERY: {
+      let { id, info } = payload;
+      debugger;
+      return {
+        ...state,
+        querties: state.querties.map((q) => {
+          return q.id === id ? { id, ...info } : q;
+        }),
+      };
+    }
+
+    case UPDATE_DOC: {
+      let { id, doc } = payload;
+      debugger;
+
+      return {
+        ...state,
+        querties: state.querties.map((q) => {
+          return q.id === id ? { ...q, ...doc } : q;
+        }),
+      };
+    }
+
+    case SET_QUERIES: {
+      debugger;
+      return {
+        ...state,
+        querties: payload,
+      };
+    }
+
+    case ADD_QUERY: {
+      return {
+        ...state,
+        querties: [...state.querties, payload],
+      };
+    }
+
     case SET_USERS: {
       let services = state.services;
       return {
@@ -103,7 +150,6 @@ const reducer = (state = initState, { type, payload }) => {
             },
           };
 
-          debugger;
           return { ...data };
         }),
       };
@@ -334,6 +380,105 @@ export const getServices = () => async (dispatch) => {
   });
 };
 
+// QUERY
+export const getUpdatedQuery = (id) => async (dispatch) => {
+  let doc = await (await db.collection("querties").doc(id).get()).data();
+
+  dispatch(getUpdatedQueryAC(id, doc));
+};
+
+const getUpdatedQueryAC = (id, info) => ({
+  type: GET_UPDATED_QUERY,
+  payload: { id, info },
+});
+
+export const saveMessage = (id, text, messages) => async (
+  dispatch,
+  getState
+) => {
+  debugger;
+
+  let doc = await db
+    .collection("querties")
+    .doc(id)
+    .update({
+      messages: [
+        ...messages,
+        {
+          author: getState().credUser.id,
+          date: new Date(),
+          text,
+        },
+      ],
+    });
+
+  let docN = await (await db.collection("querties").doc(id).get()).data();
+
+  dispatch(updateDocAC(id, docN));
+  debugger;
+};
+
+const updateDocAC = (id, doc) => ({
+  type: UPDATE_DOC,
+  payload: {
+    id,
+    doc,
+  },
+});
+
+export const getQuery = (id) => async (dispatch) => {
+  let docs = await (
+    await db.collection("querties").orderBy("date", "asc").get()
+  ).docs;
+
+  let queries = [];
+
+  docs.forEach((doc) => {
+    let data = doc.data();
+    if (data.author1 === id || data.author2 === id) {
+      queries.push({ ...data, id: doc.id });
+    }
+  });
+  dispatch(getQueriesAC(queries));
+};
+
+const getQueriesAC = (queries) => ({
+  type: SET_QUERIES,
+  payload: queries,
+});
+
+export const addQuery = (profileId, credId) => async (dispatch) => {
+  let doc = await db.collection("querties").doc();
+
+  let data = {
+    author1: profileId,
+    author2: credId,
+    messages: [],
+    progress: "wait comfirm",
+    date: new Date(),
+  };
+
+  await doc.set(data);
+
+  let newDate = await (
+    await db.collection("querties").doc(doc.id).get()
+  ).data();
+  dispatch(
+    addQueryAC({
+      ...newDate,
+      id: doc.id,
+    })
+  );
+
+  // let newData = await (await db.collection("users").doc(id).get()).data();
+  // dispatch(updateUserInfoAC(id, newData));
+};
+
+const addQueryAC = (query) => ({
+  type: ADD_QUERY,
+  payload: query,
+});
+
 export const updateUserInfo = (id, newInfo) => async (dispatch) => {
   let data = await db
     .collection("users")
@@ -479,6 +624,8 @@ export const loginCache = () => async (dispatch) => {
   let req = JSON.parse(localStorage.getItem("userHands"));
 
   let id = (req && req.id) || null;
+
+  id && dispatch(getQuery(id));
 
   let data = id ? await dispatch(getUser(id)) : {};
   dispatch(loginAC(data));
@@ -720,6 +867,7 @@ export const loginUser = ({ email, pass }) => async (dispatch) => {
         "userHands",
         JSON.stringify({ id: doc.id, info: doc.data() })
       );
+      dispatch(getQuery(doc.id));
       dispatch(
         authUserAC({
           id: doc.id,

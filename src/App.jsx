@@ -30,6 +30,8 @@ import Footer from "./components/Footer";
 import Header from "./components/Header";
 import AllUsers from "./screen/AllUsers";
 import AllFeedback from "./screen/AllFeedback";
+import Querties from "./screen/Querties";
+import Dialog from "./screen/Dialog";
 
 function App({
   getUsers,
@@ -54,6 +56,9 @@ function App({
       <Header />
 
       <div className="content">
+        <Route path="/querties" exact component={Querties} />
+        <Route path="/querties/:id" component={Dialog} />
+
         <Route path="/admin/users" exact component={AllUsers} />
         <Route path="/admin/feedbacks" exact component={AllFeedback} />
         <Route path="/feedback" exact component={Feedback} />
