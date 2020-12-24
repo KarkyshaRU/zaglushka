@@ -52,11 +52,16 @@ const initState = {
   services: [],
 
   querties: [],
+
+  isLoading: true,
 };
 
 async function asyncForEach(arr, callback) {
   for (let i = 0; i < arr.length; i++) await callback(arr[i], i, arr);
 }
+
+// LOADER
+const SET_IS_LOADING = "SET_IS_LOADING";
 
 // QUERY
 const UPDATE_DOC = "UPDATE_DOC";
@@ -96,7 +101,6 @@ const reducer = (state = initState, { type, payload }) => {
     // Query
     case GET_UPDATED_QUERY: {
       let { id, info } = payload;
-      debugger;
       return {
         ...state,
         querties: state.querties.map((q) => {
@@ -107,7 +111,6 @@ const reducer = (state = initState, { type, payload }) => {
 
     case UPDATE_DOC: {
       let { id, doc } = payload;
-      debugger;
 
       return {
         ...state,
@@ -118,7 +121,6 @@ const reducer = (state = initState, { type, payload }) => {
     }
 
     case SET_QUERIES: {
-      debugger;
       return {
         ...state,
         querties: payload,
@@ -177,8 +179,6 @@ const reducer = (state = initState, { type, payload }) => {
           }),
         },
       };
-
-      debugger;
 
       return {
         ...state,
@@ -359,10 +359,34 @@ const reducer = (state = initState, { type, payload }) => {
       return { ...state, regForm: { ...state.regForm, block: payload } };
     }
 
+    // LOADER
+    case SET_IS_LOADING: {
+      return { ...state, isLoading: payload };
+    }
+
     default:
       return state;
   }
 };
+
+export const loadingProject = () => async (dispatch) => {
+  await dispatch(getServices());
+  await dispatch(getAllFeedbacks());
+  await dispatch(loginCache());
+  await dispatch(getUsers());
+  await dispatch(getLastFeedback());
+  dispatch(setIsLoading(false));
+};
+
+// LOADER
+export const setIsLoading = (status) => async (dispatch) => {
+  dispatch(setIsLoadingAC(status));
+};
+
+const setIsLoadingAC = (status) => ({
+  type: SET_IS_LOADING,
+  payload: status,
+});
 
 export const getServices = () => async (dispatch) => {
   let data = await (await db.collection("settings").doc("services").get())
@@ -396,8 +420,6 @@ export const saveMessage = (id, text, messages) => async (
   dispatch,
   getState
 ) => {
-  debugger;
-
   let doc = await db
     .collection("querties")
     .doc(id)
@@ -415,7 +437,24 @@ export const saveMessage = (id, text, messages) => async (
   let docN = await (await db.collection("querties").doc(id).get()).data();
 
   dispatch(updateDocAC(id, docN));
+};
+
+export const endDialog = (status, id, author1, author2, credUserId) => async (
+  dispatch
+) => {
+  const newStatus = status === "process" ? "wait done" : "done";
+  const author1IsDone = author1 === credUserId;
+  const author2IsDone = author2 === credUserId;
+
+  let doc = await db.collection("querties").doc(id).update({
+    progress: newStatus,
+    author1IsDone,
+    author2IsDone,
+  });
+
+  let docN = await (await db.collection("querties").doc(id).get()).data();
   debugger;
+  dispatch(updateDocAC(id, docN));
 };
 
 const updateDocAC = (id, doc) => ({
@@ -454,7 +493,7 @@ export const addQuery = (profileId, credId) => async (dispatch) => {
     author1: profileId,
     author2: credId,
     messages: [],
-    progress: "wait comfirm",
+    progress: "process",
     date: new Date(),
   };
 

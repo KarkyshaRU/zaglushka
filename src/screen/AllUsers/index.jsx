@@ -30,6 +30,7 @@ function AllUsers({
   changeServiceStatus,
   servicesFilterLine,
   services,
+  isLoading,
 
   // filter users
   changeUsersFilterLine,
@@ -39,11 +40,12 @@ function AllUsers({
   credUser,
 }) {
   if (!credUser.id) {
+    debugger;
     return <Redirect to="/login" />;
   }
 
   if (credUser.info.role !== 80) {
-    return <Redirect to="/feedback" />;
+    return <Redirect to={"/profile/" + credUser.id} />;
   }
 
   return (
@@ -146,6 +148,9 @@ function AllUsers({
 export default connect(
   (state) => {
     return {
+      // loading
+      isLoading: state.isLoading,
+
       // filter
       servicesFilterLine: state.servicesFilterLine,
       services: state.services.filter((s) => {

@@ -5,6 +5,9 @@ import { NavLink, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { getQuery } from "../../redux/reducer";
 
+// components
+import Avatar from "../../helpers/Avatar";
+
 // Styles
 import s from "./Querties.module.scss";
 import formatDataFeedback from "../../helpers/formatDataFeedback";
@@ -12,10 +15,14 @@ import formatFullNameFeedback from "../../helpers/formatFullNameFeedback copy";
 import parseQueryStatus from "../../helpers/parseQueryStatus";
 
 const QuertyItem = ({ avatar, fullName, date, progress, userId, id }) => {
+  debugger;
+
   return (
     <div className={s.quertyItem}>
       <div className={s.withAva}>
-        <div className={s.avatar}></div>
+        {/* <div className={s.avatar}></div> */}
+
+        <Avatar src={avatar} size={45} />
 
         <div className={s.info}>
           <div className={s.rate}>

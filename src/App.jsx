@@ -11,6 +11,8 @@ import {
   getLastFeedback,
   getAllFeedbacks,
   getServices,
+  setIsLoading,
+  loadingProject,
 } from "./redux/reducer";
 
 // Components
@@ -33,59 +35,63 @@ import AllFeedback from "./screen/AllFeedback";
 import Querties from "./screen/Querties";
 import Dialog from "./screen/Dialog";
 
-function App({
-  getUsers,
-  loginCache,
+// images
+import loader from "./accets/svg/loader.svg";
 
-  // feeback
-  getLastFeedback,
-  getAllFeedbacks,
-
-  getServices,
-}) {
+function App({ isLoading, loadingProject }) {
   useEffect(() => {
-    getServices();
-    getAllFeedbacks();
-    loginCache();
-    getUsers();
-    getLastFeedback();
-  }, [getUsers, loginCache, getLastFeedback]);
+    loadingProject();
+  }, [loadingProject]);
 
   return (
     <div className="App">
       <Header />
 
-      <div className="content">
-        <Route path="/querties" exact component={Querties} />
-        <Route path="/querties/:id" component={Dialog} />
+      {isLoading ? (
+        <div className="loader">
+          <img src={loader} alt="loader" />
+        </div>
+      ) : (
+        <div className="content">
+          <Route path="/querties" exact component={Querties} />
+          <Route path="/querties/:id" component={Dialog} />
 
-        <Route path="/admin/users" exact component={AllUsers} />
-        <Route path="/admin/feedbacks" exact component={AllFeedback} />
-        <Route path="/feedback" exact component={Feedback} />
-        <Route path="/rules" exact component={Rules} />
-        <Route path="/reg" exact component={Reg} />
-        <Route path="/login" exact component={Login} />
+          <Route path="/admin/users" exact component={AllUsers} />
+          <Route path="/admin/feedbacks" exact component={AllFeedback} />
+          <Route path="/feedback" exact component={Feedback} />
+          <Route path="/rules" exact component={Rules} />
+          <Route path="/reg" exact component={Reg} />
+          <Route path="/login" exact component={Login} />
 
-        <Route path="/volunteers" exact component={Volunteers} />
-        <Route path="/profile/:id" exact component={Profile} />
+          <Route path="/volunteers" exact component={Volunteers} />
+          <Route path="/profile/:id" exact component={Profile} />
 
-        <Route path="/about" exact component={AboutUs} />
-        <Route path="/" exact component={Home} />
-      </div>
+          <Route path="/about" exact component={AboutUs} />
+          <Route path="/" exact component={Home} />
+        </div>
+      )}
 
       <Footer />
     </div>
   );
 }
 
-export default connect((state) => ({ users: state.users }), {
-  getUsers,
-  getUser,
-  loginCache,
+export default connect(
+  (state) => ({ users: state.users, isLoading: state.isLoading }),
+  {
+    getUsers,
+    getUser,
+    loginCache,
 
-  // feebacks
-  getLastFeedback,
-  getAllFeedbacks,
+    // feebacks
+    getLastFeedback,
+    getAllFeedbacks,
 
-  getServices,
-})(App);
+    getServices,
+
+    // loading
+    setIsLoading,
+
+    loadingProject,
+  }
+)(App);

@@ -22,16 +22,8 @@
   display: flex;
   align-items: center;
 
-  .avatar {
-    margin-right: 5px;
-    width: 45px;
-    height: 45px;
-    background-color: #977d7d;
-    border-radius: 50%;
-    border: 3px solid $color_1;
-  }
-
   .fullName {
+    margin-left: 5px;
     font-size: 17px;
   }
 }
@@ -64,21 +56,27 @@
 }
 
 .end {
-  a {
+  color: $color_2;
+  font-size: 16px;
+  background-color: $danger;
+  text-decoration: none;
+  padding: 0.3rem 0.4rem;
+  border-radius: 30px;
+  border: 3px solid transparent;
+
+  transition: 0.5s linear all;
+
+  &:hover {
+    color: $danger;
+    background-color: transparent;
+    border-color: $danger;
+  }
+
+  &:disabled,
+  &[disabled] {
+    border: 1px solid transparent;
+    background-color: $danger_disabled;
     color: $color_2;
-    background-color: $danger;
-    text-decoration: none;
-    padding: 0.3rem 0.4rem;
-    border-radius: 30px;
-    border: 3px solid transparent;
-
-    transition: 0.5s linear all;
-
-    &:hover {
-      color: $danger;
-      background-color: transparent;
-      border-color: $danger;
-    }
   }
 }
 

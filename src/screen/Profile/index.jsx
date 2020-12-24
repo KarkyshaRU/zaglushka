@@ -11,6 +11,7 @@ import {
 
   // query
   addQuery,
+  setIsLoading,
 } from "../../redux/reducer";
 
 import s from "./Profile.module.scss";
@@ -188,10 +189,11 @@ export default connect(
     getUser,
     setAcctiveAccount,
     logout,
-
     updateUserInfo,
 
     // query
     addQuery,
+
+    setIsLoading,
   }
 )(Profile);
