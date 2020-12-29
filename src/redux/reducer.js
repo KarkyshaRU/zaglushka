@@ -60,6 +60,8 @@ async function asyncForEach(arr, callback) {
   for (let i = 0; i < arr.length; i++) await callback(arr[i], i, arr);
 }
 
+const UPDATE_USER_DOC = "UPDATE_USER_DOC";
+
 // LOADER
 const SET_IS_LOADING = "SET_IS_LOADING";
 
@@ -98,6 +100,20 @@ const UPDATE_FEEDBACK_STATUS = "UPDATE_FEEDBACK_STATUS";
 
 const reducer = (state = initState, { type, payload }) => {
   switch (type) {
+    case UPDATE_USER_DOC: {
+      debugger;
+      return {
+        ...state,
+        users: state.users.map((user) => {
+          if (user.id === payload.id) {
+            return { id: payload.id, info: payload.doc };
+          } else {
+            return user;
+          }
+        }),
+      };
+    }
+
     // Query
     case GET_UPDATED_QUERY: {
       let { id, info } = payload;
@@ -439,6 +455,25 @@ export const saveMessage = (id, text, messages) => async (
   dispatch(updateDocAC(id, docN));
 };
 
+export const addRate = (userId, rate) => async (dispatch) => {
+  let doc = await (await db.collection("users").doc(userId).get()).data();
+  let rateArr = doc.hasOwnProperty("rateArr") ? doc.rateArr : [];
+
+  rateArr.push(rate);
+
+  await db.collection("users").doc(userId).update({
+    rateArr,
+  });
+
+  let docN = await (await db.collection("users").doc(userId).get()).data();
+  dispatch(updateUserAC(userId, docN));
+};
+
+const updateUserAC = (id, doc) => ({
+  type: UPDATE_USER_DOC,
+  payload: { id, doc },
+});
+
 export const endDialog = (status, id, author1, author2, credUserId) => async (
   dispatch
 ) => {
@@ -453,7 +488,6 @@ export const endDialog = (status, id, author1, author2, credUserId) => async (
   });
 
   let docN = await (await db.collection("querties").doc(id).get()).data();
-  debugger;
   dispatch(updateDocAC(id, docN));
 };
 

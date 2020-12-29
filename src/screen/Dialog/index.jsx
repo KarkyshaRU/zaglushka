@@ -9,6 +9,7 @@ import {
   saveMessage,
   getUpdatedQuery,
   endDialog,
+  addRate,
 } from "../../redux/reducer";
 
 // Styles
@@ -22,6 +23,68 @@ import formatFullNameFeedback from "../../helpers/formatFullNameFeedback copy";
 import formatDataFeedback from "../../helpers/formatDataFeedback";
 import Avatar from "../../helpers/Avatar";
 import parseQueryStatus from "../../helpers/parseQueryStatus";
+
+import star_owhite from "../../accets/svg/star_owhite.svg";
+import star_outline_owhite from "../../accets/svg/star_outline_owhite.svg";
+import getAvgRate from "../../helpers/getAvgRate";
+
+const RateBlock = ({ onSend, onClose }) => {
+  const [rate, setRate] = useState(null);
+  const [hoverRate, setHoverRate] = useState(null);
+  const [error, setError] = useState("");
+
+  const onSendWithVerif = () => {
+    if (!rate) {
+      setError("Количество звезд менее одной");
+    } else {
+      onSend(rate);
+      onClose();
+    }
+  };
+
+  return (
+    <div className={s.bg}>
+      <div className={s.addBlock}>
+        <div className={s.title}>Оцените пользователя</div>
+        <div className={s.data}>
+          <div className={s.rate} onMouseLeave={() => setHoverRate(null)}>
+            {[0, 0, 0, 0, 0].map((e, idx) => {
+              return idx + 1 <= hoverRate || idx + 1 <= rate ? (
+                <img
+                  src={star_owhite}
+                  alt=""
+                  onClick={() => {
+                    setError("");
+                    setRate(idx + 1);
+                  }}
+                  onMouseEnter={() => setHoverRate(idx + 1)}
+                />
+              ) : (
+                <img
+                  src={star_outline_owhite}
+                  alt=""
+                  onClick={() => setRate(idx + 1)}
+                  onMouseEnter={() => setHoverRate(idx + 1)}
+                />
+              );
+            })}
+          </div>
+        </div>
+
+        {error && <div className={s.error}>{error}</div>}
+
+        <div className="btns">
+          <div className={s.btn} onClick={onClose}>
+            Отменить
+          </div>
+          <div className={s.btn + " " + s.close} onClick={onSendWithVerif}>
+            Завершить
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const LeftMessage = ({ text, date, authorName, avatar }) => {
   return (
@@ -104,7 +167,6 @@ const EndBtn = ({
   let d_1 = userId === author1 && author1IsDone;
   let d_2 = userId === author2 && author2IsDone;
 
-  debugger;
   return (
     <button
       className={s.end}
@@ -127,8 +189,10 @@ function Dialog({
   getUpdatedQuery,
 
   endDialog,
+  addRate,
 }) {
   const [newMessage, setnewMessage] = useState("");
+  const [isBlock, setIsBlock] = useState(false);
 
   // for head
   const idDialog = match.params.id;
@@ -138,7 +202,7 @@ function Dialog({
   if (!info) {
     return <Redirect to="/querties" />;
   }
-
+  debugger;
   const interlocutorId =
     info.author1 !== credUser.id ? info.author1 : info.author2;
   let interlocutorUnfo = null;
@@ -154,10 +218,26 @@ function Dialog({
     return <Redirect to={"/querties"} />;
   }
 
-  debugger;
-
   return (
     <div className={s.dialog}>
+      {isBlock && (
+        <RateBlock
+          onClose={() => {
+            setIsBlock(false);
+          }}
+          onSend={(rate) => {
+            addRate(interlocutorId, rate);
+            endDialog(
+              info.progress,
+              idDialog,
+              info.author1,
+              info.author2,
+              credUser.id
+            );
+          }}
+        />
+      )}
+
       <div className={s.head}>
         <div className={s.userUnfo}>
           <Avatar
@@ -165,10 +245,21 @@ function Dialog({
             size={45}
             borderColor="#004e75"
           />
-          <div className={s.fullName}>
-            {interlocutorUnfo
-              ? formatFullNameFeedback(interlocutorUnfo.info.fullName)
-              : "Загрузка..."}
+          <div className="intInfo">
+            <div className={s.fullName}>
+              {interlocutorUnfo
+                ? formatFullNameFeedback(interlocutorUnfo.info.fullName)
+                : "Загрузка..."}
+            </div>
+            <div className={s.fullName}>
+              {interlocutorUnfo
+                ? "Рейтинг: " +
+                  getAvgRate(interlocutorUnfo.info.rateArr) +
+                  " / 5 (Отзывов: " +
+                  interlocutorUnfo.info.rateArr.length +
+                  " )"
+                : "Загрузка..."}
+            </div>
           </div>
         </div>
         <div className={s.status_wrp}>
@@ -179,15 +270,7 @@ function Dialog({
         </div>
 
         <EndBtn
-          endDialog={() => {
-            endDialog(
-              info.progress,
-              idDialog,
-              info.author1,
-              info.author2,
-              credUser.id
-            );
-          }}
+          endDialog={() => setIsBlock(true)}
           progress={info.progress}
           userId={credUser.id}
           author1={info.author1}
@@ -262,5 +345,6 @@ export default connect(
     saveMessage,
     getUpdatedQuery,
     endDialog,
+    addRate,
   }
 )(Dialog);
